@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarWidget({
+    required this.title,
+    Key? key,
+  });
+
+  final String title;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        'Project DoM',
+        title,
         style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
