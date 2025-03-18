@@ -111,42 +111,45 @@ class _HomeWidgetState extends State<HomeWidget> {
         // Foreground UI (Remains Static)
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BadingTextWidget(
-                  badingText: "${badingTexts[currentIndex]},\n$username"),
-              LayoutBuilder(builder: (context, constraints) {
-                if (constraints.maxWidth < 600) {
-                  return Column(
-                    children: [
-                      ScheduleWidget(
-                        tasks: officialSchedule,
-                      ),
-                      SizedBox(height: 10),
-                      ToDoWidget(
-                        tasks: tasks,
-                      ),
-                    ],
-                  );
-                } else {
-                  return Row(
-                    children: [
-                      Expanded(
-                          child: ScheduleWidget(
-                        tasks: officialSchedule,
-                      )),
-                      SizedBox(width: 10),
-                      Expanded(
-                          child: ToDoWidget(
-                        tasks: tasks,
-                      )),
-                    ],
-                  );
-                }
-              })
-            ],
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BadingTextWidget(
+                    badingText: "${badingTexts[currentIndex]},\n$username"),
+                LayoutBuilder(builder: (context, constraints) {
+                  if (constraints.maxWidth < 600) {
+                    return Column(
+                        children: [
+                          ScheduleWidget(
+                            tasks: officialSchedule,
+                          ),
+                          SizedBox(height: 10),
+                          ToDoWidget(
+                            tasks: tasks,
+                          ),
+                        ],
+                    );
+                  } else {
+                    return Row(
+                      children: [
+                        Expanded(
+                            child: ScheduleWidget(
+                          tasks: officialSchedule,
+                        )),
+                        SizedBox(width: 10),
+                        Expanded(
+                            child: ToDoWidget(
+                          tasks: tasks,
+                        )),
+                      ],
+                    );
+                  }
+                })
+              ],
+            ),
           ),
         ),
       ],
@@ -198,19 +201,19 @@ class ToDoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Container(
-          color: Colors.amber,
-          width: double.infinity,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('To-Do List'),
+        children: [
+          Container(
+            color: Colors.amber,
+            width: double.infinity,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('To-Do List'),
+              ),
             ),
           ),
-        ),
-        for (var task in tasks) ToDoItemWidget(task: task),
-      ],
+          for (var task in tasks) ToDoItemWidget(task: task),
+        ],
     );
   }
 }
@@ -292,19 +295,19 @@ class ScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Container(
-          color: Colors.amber,
-          width: double.infinity,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Official Schedule'),
+        children: [
+          Container(
+            color: Colors.amber,
+            width: double.infinity,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Official Schedule'),
+              ),
             ),
           ),
-        ),
-        for (var task in tasks) ToDoItemWidget(task: task),
-      ],
+          for (var task in tasks) ToDoItemWidget(task: task),
+        ],
     );
   }
 }
