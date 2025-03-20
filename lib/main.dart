@@ -26,7 +26,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/library';
+  String currentRoute = '/home';
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
   // MaterialAccentColor color = ;

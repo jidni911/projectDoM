@@ -18,7 +18,41 @@ class FormExampleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Flutter Demo Form",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: FormPage(title: "Product Add Form"),
+      // home: FormPage(title: "Product Add Form"),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("hell22o"),
+          backgroundColor: Colors.amber,
+        ),
+        body: ListView(
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/330px-The_Great_Gatsby_Cover_1925_Retouched.jpg"),fit: BoxFit.cover)
+                    ),
+                    child: Text( MediaQuery.of(context).size.width.toString()),
+                  ),
+                  Image.network(
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg/330px-To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg"),
+                  Image.network(
+                      "https://upload.wikimedia.org/wikipedia/en/5/51/1984_first_edition_cover.jpg"),
+                  Image.network(
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg/330px-The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg"),
+                  Image.network(
+                      "https://upload.wikimedia.org/wikipedia/en/f/fb/Lord_Rings_Fellowship_Ring.jpg"),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -59,10 +93,11 @@ class _FormPageState extends State<FormPage> {
     switch (currentIndex) {
       case 0:
         page = ItemForm(item: selectedItem);
+      // page = MyListView();
       case 1:
-        
-        page = ItemList(items: items, updateItems: updateItems,editItem: editItem);
-        // updateItems();
+        page = ItemList(
+            items: items, updateItems: updateItems, editItem: editItem);
+      // updateItems();
     }
     return Scaffold(
       appBar: AppBar(title: Text(widget.title), centerTitle: true),
@@ -121,7 +156,6 @@ class _ItemFormState extends State<ItemForm> {
 
   final List<String> _categories = ['Electroics', 'Clothing', 'Groceries'];
 
-
   @override
   void initState() {
     super.initState();
@@ -135,6 +169,7 @@ class _ItemFormState extends State<ItemForm> {
       _selectedCategory = widget.item!.category;
     }
   }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -252,7 +287,11 @@ class _ItemFormState extends State<ItemForm> {
 }
 
 class ItemList extends StatelessWidget {
-  const ItemList({required this.items,required this.updateItems,required this.editItem, super.key});
+  const ItemList(
+      {required this.items,
+      required this.updateItems,
+      required this.editItem,
+      super.key});
 
   final Function editItem;
 
@@ -267,7 +306,11 @@ class ItemList extends StatelessWidget {
           Text('Item List'),
           for (var item in items)
             ListTile(
-              leading: ElevatedButton(onPressed: (){editItem(item.id!);}, child: Text(item.id.toString())),
+              leading: ElevatedButton(
+                  onPressed: () {
+                    editItem(item.id!);
+                  },
+                  child: Text(item.id.toString())),
               title: Text(item.name),
               subtitle: Text('Quantity: ${item.quantity}'),
               trailing: IconButton(

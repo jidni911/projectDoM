@@ -33,10 +33,10 @@ class GeneratorPage extends StatelessWidget {
                     // appState.toggleAttendence(student);
                     appState.getNext(false);
                   },
-                  icon: Icon(Icons.close, color: Colors.red, size: 40),
+                  icon: Icon(Icons.close, color: Colors.red, size: 30),
                   label: Text(
                     'Absent',
-                    style: TextStyle(fontSize: 40, color: Colors.red),
+                    style: TextStyle(fontSize: 30, color: Colors.red),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -45,10 +45,10 @@ class GeneratorPage extends StatelessWidget {
                     // appState.toggleAttendence(student);
                     appState.getNext(true);
                   },
-                  icon: Icon(Icons.done, color: Colors.green, size: 40),
+                  icon: Icon(Icons.done, color: Colors.green, size: 30),
                   label: Text(
                     'Present',
-                    style: TextStyle(color: Colors.green, fontSize: 40),
+                    style: TextStyle(color: Colors.green, fontSize: 30),
                   ),
                 ),
               ],
