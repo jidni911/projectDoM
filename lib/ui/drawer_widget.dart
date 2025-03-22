@@ -33,363 +33,128 @@ class DrawerWidget extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.home,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Home',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/home'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/home');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Home',
+              icon: Icons.home,
+              route: '/home',
             ),
-            ListTile(
-              leading: Icon(
-                Icons.notifications,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Notices',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/notice'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/notice');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Notices',
+              icon: Icons.notifications,
+              route: '/notice',
             ),
-            ListTile(
-              leading: Icon(
-                Icons.check,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Attendence',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/attendence'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/attendence');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Attendence',
+              icon: Icons.check,
+              route: '/attendence',
             ),
-            ListTile(
-              leading: Icon(
-                Icons.book,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Library',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/library'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/library');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Library',
+              icon: Icons.book,
+              route: '/library',
             ),
-            ListTile(
-              leading: Icon(
-                Icons.assignment,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Assignments',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/assignments'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/assignments');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Assignments',
+              icon: Icons.assignment,
+              route: '/assignments',
             ),
-            ListTile(
-              leading: Icon(
-                Icons.verified,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Verification',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/verification'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/verification');
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Settings',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/settings'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/settings');
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.copyright,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              title: Text(
-                'Credits',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-              ),
-              trailing: currentRoute == '/credits'
-                  ? Icon(
-                      Icons.keyboard_double_arrow_right,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    )
-                  : null,
-              onTap: () {
-                onPageChange('/credits');
-                Navigator.pop(context);
-              },
+            DrawerListTile(
+              currentRoute: currentRoute,
+              onPageChange: onPageChange,
+              text: 'Verification',
+              icon: Icons.verified,
+              route: '/verification',
             ),
             ExpansionTile(
-                leading: Icon(
-                  Icons.info,
-                  color: Theme.of(context).colorScheme.onPrimary,
+              leading: Icon(
+                Icons.unfold_more_double,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              title: Text(
+                'More',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              trailing: ['/settings', '/credits'].contains(currentRoute)
+                  ? Icon(
+                      Icons.keyboard_double_arrow_right,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    )
+                  : Icon(
+                      Icons.keyboard_double_arrow_down,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              children: [
+                DrawerListTile(
+                  currentRoute: currentRoute,
+                  onPageChange: onPageChange,
+                  text: 'Settings',
+                  icon: Icons.settings,
+                  route: '/settings',
                 ),
-                title: Text(
-                  'About',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                DrawerListTile(
+                  currentRoute: currentRoute,
+                  onPageChange: onPageChange,
+                  text: 'Credits',
+                  icon: Icons.copyright,
+                  route: '/credits',
                 ),
-                trailing: currentRoute == '/about'
-                    ? Icon(
-                        Icons.keyboard_double_arrow_right,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      )
-                    : null,
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.home,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Home',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/home'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/home');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.notifications,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Notices',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/notice'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/notice');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.check,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Attendence',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/attendence'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/attendence');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.book,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Library',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/library'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/library');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.assignment,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Assignments',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/assignments'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/assignments');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.verified,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Verification',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/verification'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/verification');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.settings,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Settings',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/settings'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/settings');
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.copyright,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    title: Text(
-                      'Credits',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    trailing: currentRoute == '/credits'
-                        ? Icon(
-                            Icons.keyboard_double_arrow_right,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          )
-                        : null,
-                    onTap: () {
-                      onPageChange('/credits');
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],)
+              ],
+            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class DrawerListTile extends StatelessWidget {
+  const DrawerListTile({
+    super.key,
+    required this.currentRoute,
+    required this.onPageChange,
+    required this.text,
+    required this.icon,
+    required this.route,
+  });
+
+  final String currentRoute;
+  final Function(String p1) onPageChange;
+  final String text;
+  final IconData icon;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
+      title: Text(
+        text,
+        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+      ),
+      trailing: currentRoute == route
+          ? Icon(
+              Icons.keyboard_double_arrow_right,
+              color: Theme.of(context).colorScheme.onPrimary,
+            )
+          : null,
+      onTap: () {
+        onPageChange(route);
+        Navigator.pop(context);
+      },
     );
   }
 }

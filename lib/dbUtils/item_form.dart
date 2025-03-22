@@ -5,11 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:project_dom/dbUtils/db_helper.dart';
 import 'package:project_dom/dbUtils/item.dart';
 import 'package:project_dom/models/books.dart';
-import 'package:sqflite/sqflite.dart';
-
-void main() {
-  runApp(FormExampleApp());
-}
+// import 'package:sqflite/sqflite.dart';
 
 class FormExampleApp extends StatefulWidget {
   const FormExampleApp({super.key});
@@ -68,7 +64,7 @@ class _FormExampleAppState extends State<FormExampleApp> {
               ElevatedButton.icon(
                   onPressed: () {
                     setState(() {
-                      if(count>2)count--;
+                      if (count > 2) count--;
                     });
                     displayToastMessage(
                       "Removed",

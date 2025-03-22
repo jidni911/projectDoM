@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_dom/dbUtils/item_form.dart';
 import 'package:project_dom/setup.dart';
 import 'package:project_dom/ui/app_bar_widget.dart';
 import 'package:project_dom/ui/assignments/assignments.dart';
@@ -15,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ui/profile/profile.dart';
 
 void main() {
+  // runApp(FormExampleApp());
   runApp(MyApp());
 }
 
@@ -26,7 +28,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/home';
+  String currentRoute = '/notice';
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
   // MaterialAccentColor color = ;
