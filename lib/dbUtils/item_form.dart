@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
 import 'package:project_dom/dbUtils/db_helper.dart';
 import 'package:project_dom/dbUtils/item.dart';
+import 'package:project_dom/models/books.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(FormExampleApp());
 }
 
-class FormExampleApp extends StatelessWidget {
+class FormExampleApp extends StatefulWidget {
   const FormExampleApp({super.key});
 
+  @override
+  State<FormExampleApp> createState() => _FormExampleAppState();
+}
+
+class _FormExampleAppState extends State<FormExampleApp> {
+  List<String?> imageUrls = demoBooks.map((book) => book.imageUrl).toList();
+  int count = 3;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,41 +29,61 @@ class FormExampleApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       // home: FormPage(title: "Product Add Form"),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("hell22o"),
-          backgroundColor: Colors.amber,
-        ),
-        body: ListView(
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Container(
-                    height: 200,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/330px-The_Great_Gatsby_Cover_1925_Retouched.jpg"),fit: BoxFit.cover)
-                    ),
-                    child: Text( MediaQuery.of(context).size.width.toString()),
-                  ),
-                  Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg/330px-To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg"),
-                  Image.network(
-                      "https://upload.wikimedia.org/wikipedia/en/5/51/1984_first_edition_cover.jpg"),
-                  Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg/330px-The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg"),
-                  Image.network(
-                      "https://upload.wikimedia.org/wikipedia/en/f/fb/Lord_Rings_Fellowship_Ring.jpg"),
-                ],
+          appBar: AppBar(
+            title: Text("hell22o"),
+            backgroundColor: Colors.amber,
+          ),
+          body: GridView.count(
+            crossAxisCount: count,
+            crossAxisSpacing: 30,
+            children: [
+              Container(
+                height: 200,
+                width: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg/330px-The_Great_Gatsby_Cover_1925_Retouched.jpg"),
+                        fit: BoxFit.cover)),
+                child: Text(MediaQuery.of(context).size.width.toString()),
               ),
-            )
-          ],
-        ),
-      ),
+              Image.network(
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg/330px-To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg"),
+              Image.network(
+                  "https://upload.wikimedia.org/wikipedia/en/5/51/1984_first_edition_cover.jpg"),
+              Image.network(
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg/330px-The_Catcher_in_the_Rye_%281951%2C_first_edition_cover%29.jpg"),
+              Image.network(
+                  "https://upload.wikimedia.org/wikipedia/en/f/fb/Lord_Rings_Fellowship_Ring.jpg"),
+              ElevatedButton.icon(
+                  onPressed: () {
+                    // setState(() {
+                    //   count++;
+                    // });
+                    displayToastMessage("Added");
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text("Add")),
+              ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      if(count>2)count--;
+                    });
+                    displayToastMessage(
+                      "Removed",
+                    );
+                  },
+                  icon: Icon(Icons.remove),
+                  label: Text("Remove")),
+            ],
+          )),
     );
   }
+}
+
+displayToastMessage(String message) {
+  Fluttertoast.showToast(msg: message);
 }
 
 class FormPage extends StatefulWidget {
