@@ -39,105 +39,76 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
       ),
-      SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Center(
-              child: Container(
-                color: Theme.of(context).colorScheme.primary,
-                width: 200,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        letterSpacing: 2,
-                      ),
+      Column(
+        children: [
+          SizedBox(height: 10),
+          Center(
+            child: Container(
+              color: Theme.of(context).colorScheme.primary,
+              width: 200,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Settings',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      letterSpacing: 2,
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 10),
-            Center(
-              child: Container(
-                color: Theme.of(context).colorScheme.primary,
-                width: 200,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Theme',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        letterSpacing: 2,
-                      ),
+          ),
+          SizedBox(height: 10),
+          Center(
+            child: Container(
+              color: Theme.of(context).colorScheme.primary,
+              width: 200,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Theme',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      letterSpacing: 2,
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 400, childAspectRatio: 400 / 80),
               children: [
-                for (var color in colors.take(4))
+                for (var color in colors)
                   ThemeButton(
                     color: color,
                     changeColor: changeColor,
                   ),
               ],
             ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var color in colors.skip(4).take(4))
-                  ThemeButton(
-                    color: color,
-                    changeColor: changeColor,
-                  ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var color in colors.skip(8).take(4))
-                  ThemeButton(
-                    color: color,
-                    changeColor: changeColor,
-                  ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var color in colors.skip(12).take(4))
-                  ThemeButton(
-                    color: color,
-                    changeColor: changeColor,
-                  ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     ]);
   }
 }
 
 class ThemeButton extends StatelessWidget {
-  const ThemeButton(
-      {required this.color, required this.changeColor, super.key});
+  const ThemeButton({
+    required this.color,
+    required this.changeColor,
+    super.key,
+  });
 
   final MapEntry<MaterialAccentColor, String> color;
 
@@ -145,27 +116,24 @@ class ThemeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        margin:
-            const EdgeInsets.symmetric(horizontal: 8, vertical: 5).copyWith(),
-        child: ElevatedButton(
-          onPressed: () {
-            changeColor(color.key);
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(color.key),
-            padding: WidgetStateProperty.all(
-                EdgeInsets.symmetric(horizontal: 10, vertical: 40)),
-          ),
-          child: Text(
-            color.value,
-            style: TextStyle(
-                color: ThemeData.from(
-                        colorScheme: ColorScheme.fromSeed(seedColor: color.key))
-                    .colorScheme
-                    .onPrimary),
-          ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5).copyWith(),
+      child: ElevatedButton(
+        onPressed: () {
+          changeColor(color.key);
+        },
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(color.key),
+          padding: WidgetStateProperty.all(
+              EdgeInsets.symmetric(horizontal: 10, vertical: 40)),
+        ),
+        child: Text(
+          color.value,
+          style: TextStyle(
+              color: ThemeData.from(
+                      colorScheme: ColorScheme.fromSeed(seedColor: color.key))
+                  .colorScheme
+                  .onPrimary),
         ),
       ),
     );

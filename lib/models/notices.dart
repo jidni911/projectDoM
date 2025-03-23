@@ -24,4 +24,14 @@ class Notice {
   }
 }
 
-enum NoticeType { official, club, cr, personal }
+enum NoticeType {
+  official,
+  club,
+  cr,
+  personal;
+
+  @override
+  String toString() {
+    return name;
+  }
+}

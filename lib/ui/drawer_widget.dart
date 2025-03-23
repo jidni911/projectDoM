@@ -68,13 +68,6 @@ class DrawerWidget extends StatelessWidget {
               icon: Icons.assignment,
               route: '/assignments',
             ),
-            DrawerListTile(
-              currentRoute: currentRoute,
-              onPageChange: onPageChange,
-              text: 'Verification',
-              icon: Icons.verified,
-              route: '/verification',
-            ),
             ExpansionTile(
               leading: Icon(
                 Icons.unfold_more_double,
@@ -85,7 +78,8 @@ class DrawerWidget extends StatelessWidget {
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),
-              trailing: ['/settings', '/credits'].contains(currentRoute)
+              trailing: ['/settings', '/credits', '/verification']
+                      .contains(currentRoute)
                   ? Icon(
                       Icons.keyboard_double_arrow_right,
                       color: Theme.of(context).colorScheme.onPrimary,
@@ -95,6 +89,13 @@ class DrawerWidget extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
               children: [
+                DrawerListTile(
+                  currentRoute: currentRoute,
+                  onPageChange: onPageChange,
+                  text: 'Verification',
+                  icon: Icons.verified,
+                  route: '/verification',
+                ),
                 DrawerListTile(
                   currentRoute: currentRoute,
                   onPageChange: onPageChange,

@@ -107,17 +107,29 @@ class NoticeWidget extends StatelessWidget {
             Icons.info,
             color: Theme.of(context).colorScheme.onPrimary,
           ),
-          title: Text(
-            notice.title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Theme.of(context).colorScheme.onPrimary,
-              letterSpacing: 2,
-            ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                notice.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  letterSpacing: 2,
+                ),
+              ),
+              Text(
+                " - ${notice.notifier.name}",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
           ),
           subtitle: Text(
-            notice.description,
+            "${notice.noticeType} - ${notice.description}",
             style: TextStyle(
               fontSize: 12,
               color: Theme.of(context).colorScheme.onPrimary,

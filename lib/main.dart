@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_dom/apiUtils/post_list.dart';
 import 'package:project_dom/dbUtils/item_form.dart';
 import 'package:project_dom/setup.dart';
 import 'package:project_dom/ui/app_bar_widget.dart';
@@ -17,6 +18,7 @@ import 'ui/profile/profile.dart';
 
 void main() {
   // runApp(FormExampleApp());
+  // runApp(ApiApp());
   runApp(MyApp());
 }
 
@@ -28,21 +30,46 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/notice';
+  String currentRoute = '/settings';
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
-  // MaterialAccentColor color = ;
+  DynamicSchemeVariant scheme = DynamicSchemeVariant.tonalSpot;
+  Brightness brightness = Brightness.light;
+  double contrastLevel = 0.0;
+  SharedPreferences? prefs;
+  Future<SharedPreferences> get preferences async {
+    prefs ??= await SharedPreferences.getInstance();
+    return prefs!;
+  }
 
   void changeColor(MaterialAccentColor newColor) async {
     setState(() {
       color = newColor;
     });
-    _saveColor();
+    await preferences.then((prefs) => prefs.setInt('color', color.toARGB32()));
   }
 
-  Future<void> _saveColor() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('color', color.toARGB32());
+  void changeScheme(DynamicSchemeVariant newScheme) async {
+    setState(() {
+      scheme = newScheme;
+    });
+    await preferences.then((prefs) => prefs.setInt('scheme', scheme.index));
+  }
+
+  void changeBrightness(Brightness newBrightness) async {
+    setState(() {
+      brightness = newBrightness;
+    });
+    await preferences
+        .then((prefs) => prefs.setInt('brightness', brightness.index));
+  }
+
+  void changeContrastLevel(double newContrastLevel) async {
+    setState(() {
+      contrastLevel = newContrastLevel;
+    });
+    await preferences
+        .then((prefs) => prefs.setDouble('contrastLevel', contrastLevel));
   }
 
   @override
@@ -52,10 +79,19 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loadColor() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int savedColor = prefs.getInt('color') ?? Colors.cyanAccent.toARGB32();
-    setState(() {
-      color = MaterialAccentColor(savedColor, const <int, Color>{});
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    preferences.then((prefs) {
+      final int savedColor =
+          prefs.getInt('color') ?? Colors.cyanAccent.toARGB32();
+      final int savedScheme = prefs.getInt('scheme') ?? 0;
+      final int savedBrightness = prefs.getInt('brightness') ?? 1;
+      final double savedContrastLevel = prefs.getDouble('contrastLevel') ?? 0.0;
+      setState(() {
+        color = MaterialAccentColor(savedColor, const <int, Color>{});
+        scheme = DynamicSchemeVariant.values[savedScheme];
+        brightness = Brightness.values[savedBrightness];
+        contrastLevel = savedContrastLevel;
+      });
     });
   }
 
@@ -104,10 +140,13 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: showDebug,
       title: 'Project DoM',
       theme: ThemeData(
-        primarySwatch: Colors.green,
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: color),
-        // primaryColor: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: color,
+          brightness: brightness,
+          dynamicSchemeVariant: scheme,
+          contrastLevel: contrastLevel,
+        ),
       ),
       home: ViewEntryPoint(
         page: page,

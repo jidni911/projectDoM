@@ -3,11 +3,7 @@ import 'package:project_dom/apiUtils/apiheloer/apihelper.dart';
 import 'package:project_dom/apiUtils/model/post.dart';
 // Your Post model
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class ApiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,14 +33,16 @@ class _PostListScreenState extends State<PostListScreen> {
 
   // Method to show the Create Post dialog
   void _showCreatePostDialog(Post? post) {
-    final _titleController = TextEditingController(text: post != null? post.title : '');
-    final _bodyController = TextEditingController( text: post != null? post.body : '');
+    final _titleController =
+        TextEditingController(text: post != null ? post.title : '');
+    final _bodyController =
+        TextEditingController(text: post != null ? post.body : '');
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text( post != null? 'Update Post' : 'Create New Post'),
+          title: Text(post != null ? 'Update Post' : 'Create New Post'),
           content: SingleChildScrollView(
             child: Column(
               children: [
@@ -79,7 +77,8 @@ class _PostListScreenState extends State<PostListScreen> {
                     _bodyController.text.isNotEmpty) {
                   try {
                     if (post != null) {
-                      final updatedPost2 = await apiService.updatePost(updatedPost);
+                      final updatedPost2 =
+                          await apiService.updatePost(updatedPost);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Post Updated: ${updatedPost2.title}'),
@@ -91,7 +90,8 @@ class _PostListScreenState extends State<PostListScreen> {
                       });
                       Navigator.of(context).pop(); // Close the dialog
                     } else {
-                      final createdPost2 = await apiService.createPost(updatedPost);
+                      final createdPost2 =
+                          await apiService.createPost(updatedPost);
                       // Show success message
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -156,6 +156,7 @@ class _PostListScreenState extends State<PostListScreen> {
             itemBuilder: (context, index) {
               Post post = postsData[index];
               return ListTile(
+                leading: CircleAvatar(child: Text('${post.id}')),
                 title: Text(post.title),
                 subtitle: Text(post.body),
                 onTap: () {

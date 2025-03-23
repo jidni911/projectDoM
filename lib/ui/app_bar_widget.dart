@@ -18,18 +18,20 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       actions: [
         IconButton(
-          icon: Icon(Icons.search),
+          icon: Icon(Icons.search,
+              color: Theme.of(context).colorScheme.onPrimary),
           onPressed: () {},
         ),
         IconButton(
-          icon: Icon(Icons.more_vert),
+          icon: Icon(Icons.more_vert,
+              color: Theme.of(context).colorScheme.onPrimary),
           onPressed: () {
             Scaffold.of(context).openEndDrawer();
           },
         ),
       ],
       leading: IconButton(
-        icon: Icon(Icons.menu),
+        icon: Icon(Icons.menu, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
