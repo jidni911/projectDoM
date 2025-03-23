@@ -56,32 +56,34 @@ class NoticePage extends StatelessWidget {
           ),
         ),
       ),
-      Column(
-        children: [
-          SizedBox(height: 10),
-          Center(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              width: 200,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Notice Board',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      letterSpacing: 2,
+      SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Center(
+              child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                width: 200,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Notice Board',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        letterSpacing: 2,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 10),
-          for (var notice in notices) NoticeWidget(notice: notice),
-        ],
+            SizedBox(height: 10),
+            for (var notice in notices) NoticeWidget(notice: notice),
+          ],
+        ),
       ),
     ]);
   }
