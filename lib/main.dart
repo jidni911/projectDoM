@@ -30,7 +30,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/profile';
+  String currentRoute = '/settings';
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
   DynamicSchemeVariant scheme = DynamicSchemeVariant.tonalSpot;
@@ -125,7 +125,16 @@ class _MyAppState extends State<MyApp> {
         page = const VerificationPage();
         title = "Verification";
       case '/settings':
-        page = SettingsPage(changeColor: changeColor);
+        page = SettingsPage(
+          changeColor: changeColor,
+          changeScheme: changeScheme,
+          changeBrightness: changeBrightness,
+          changeContrastLevel: changeContrastLevel,
+          color: color,
+          scheme: scheme,
+          brightness: brightness,
+          contrastLevel: contrastLevel,
+        );
         title = "Settings";
       case '/profile':
         page = const ProfilePage();
@@ -178,7 +187,16 @@ class _MyAppState extends State<MyApp> {
         '/library': (context) => const LibraryPage(),
         '/assignments': (context) => const AssignmentsPage(),
         '/verification': (context) => const VerificationPage(),
-        '/settings': (context) => SettingsPage(changeColor: changeColor),
+        '/settings': (context) => SettingsPage(
+              changeColor: changeColor,
+              changeScheme: changeScheme,
+              changeBrightness: changeBrightness,
+              changeContrastLevel: changeContrastLevel,
+              color: color,
+              scheme: scheme,
+              brightness: brightness,
+              contrastLevel: contrastLevel,
+            ),
         '/profile': (context) => const ProfilePage(),
         '/credits': (context) => const CreditPage(),
       },
