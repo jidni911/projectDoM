@@ -33,3 +33,10 @@ flutter:
 
   assets:
     - assets/bg/
+
+  fonts:
+    - family: superC
+      fonts:
+        - asset: fonts/sf.ttf
+        # - asset: assets/fonts/Montserrat-Bold.ttf
+        #   weight: 700

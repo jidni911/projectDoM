@@ -30,7 +30,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/settings';
+  String currentRoute = '/profile';
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
   DynamicSchemeVariant scheme = DynamicSchemeVariant.tonalSpot;
@@ -140,6 +140,23 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: showDebug,
       title: 'Project DoM',
       theme: ThemeData(
+        // textTheme: TextTheme(
+        //   bodyMedium: TextStyle(
+        //     fontSize: 22,
+        //     fontFamily: 'superC',
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        //   bodyLarge: TextStyle(
+        //     fontSize: 22,
+        //     fontFamily: 'superC',
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        //   bodySmall: TextStyle(
+        //     fontSize: 22,
+        //     fontFamily: 'superC',
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: color,
