@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_dom/ui/profile/registration_form.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -41,16 +42,7 @@ class _ProfilePageState extends State<ProfilePage>
             controller: _tabController,
             children: [
               // Page 1
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.star, size: 50, color: Colors.blue),
-                    SizedBox(height: 20),
-                    Text('This is Page 1', style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-              ),
+              RegistrationForm(),
               // Page 2
               Center(
                 child: Column(

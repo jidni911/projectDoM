@@ -30,7 +30,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String currentRoute = '/settings';
+  String currentRoute = defaultRoute;
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
   DynamicSchemeVariant scheme = DynamicSchemeVariant.tonalSpot;
@@ -179,27 +179,29 @@ class _MyAppState extends State<MyApp> {
         onPageChange: changePage,
         currentRoute: currentRoute,
         title: title,
+        brightness: brightness,
+        changeBrightness: changeBrightness,
       ),
-      routes: {
-        '/home': (context) => const HomeWidget(),
-        '/notice': (context) => const NoticePage(),
-        '/attendence': (context) => const AttendencePage(),
-        '/library': (context) => const LibraryPage(),
-        '/assignments': (context) => const AssignmentsPage(),
-        '/verification': (context) => const VerificationPage(),
-        '/settings': (context) => SettingsPage(
-              changeColor: changeColor,
-              changeScheme: changeScheme,
-              changeBrightness: changeBrightness,
-              changeContrastLevel: changeContrastLevel,
-              color: color,
-              scheme: scheme,
-              brightness: brightness,
-              contrastLevel: contrastLevel,
-            ),
-        '/profile': (context) => const ProfilePage(),
-        '/credits': (context) => const CreditPage(),
-      },
+      // routes: {
+      //   '/home': (context) => const HomeWidget(),
+      //   '/notice': (context) => const NoticePage(),
+      //   '/attendence': (context) => const AttendencePage(),
+      //   '/library': (context) => const LibraryPage(),
+      //   '/assignments': (context) => const AssignmentsPage(),
+      //   '/verification': (context) => const VerificationPage(),
+      //   '/settings': (context) => SettingsPage(
+      //         changeColor: changeColor,
+      //         changeScheme: changeScheme,
+      //         changeBrightness: changeBrightness,
+      //         changeContrastLevel: changeContrastLevel,
+      //         color: color,
+      //         scheme: scheme,
+      //         brightness: brightness,
+      //         contrastLevel: contrastLevel,
+      //       ),
+      //   '/profile': (context) => const ProfilePage(),
+      //   '/credits': (context) => const CreditPage(),
+      // },
     );
   }
 }
@@ -210,6 +212,8 @@ class ViewEntryPoint extends StatelessWidget {
     required this.onPageChange,
     required this.currentRoute,
     required this.title,
+    required this.brightness,
+    required this.changeBrightness,
     super.key,
   });
 
@@ -217,13 +221,19 @@ class ViewEntryPoint extends StatelessWidget {
   final Function(String) onPageChange;
   final String currentRoute;
   final String title;
+  final Brightness brightness;
+  final Function(Brightness) changeBrightness;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBarWidget(
         title: title,
+        onPageChange: onPageChange,
+        currentRoute: currentRoute,
+        brightness: brightness,
+        changeBrightness: changeBrightness,
       ),
       body: page,
       floatingActionButton: FloatingActionButton(
