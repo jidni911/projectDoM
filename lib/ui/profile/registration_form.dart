@@ -44,3 +44,7 @@ class RegistrationForm extends StatelessWidget {
 // User infos: name, email, password, confirm password, phone, address, role,
 // image, date of birth, gender,
 
+//Student infos: class, roll, section, registration number,
+
+//Teacher infos: subject, experience, qualification, designation
+
