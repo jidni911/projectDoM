@@ -1,3 +1,5 @@
+import 'package:project_dom/models/users.dart';
+
 class Task {
   int? id;
   String title;
@@ -5,12 +7,18 @@ class Task {
   bool isDone;
   DateTime dateTime;
 
+  User? user;
+
+  TaskType taskType;
+
   Task({
     this.id,
     required this.title,
     required this.description,
     required this.isDone,
     required this.dateTime,
+    this.user,
+    this.taskType = TaskType.private,
   });
 
   @override
@@ -25,6 +33,7 @@ class Task {
       'description': description,
       'isDone': isDone,
       'dateTime': dateTime.toIso8601String(),
+      'taskType': taskType.name,
     };
   }
 
@@ -35,6 +44,12 @@ class Task {
       description: map['description'],
       isDone: map['isDone'],
       dateTime: DateTime.parse(map['dateTime']),
+      user: User.fromJson(map['user']),
     );
   }
+}
+
+enum TaskType {
+  private,
+  official,
 }

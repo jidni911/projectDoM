@@ -10,7 +10,7 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 400) {
+        if (constraints.maxWidth < 350) {
           return Text(
               'Cant show book card\n with width ${constraints.maxWidth.ceil()}, \n contact developer');
         } else {

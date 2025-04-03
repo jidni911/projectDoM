@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project_dom/apiUtils/post_list.dart';
-import 'package:project_dom/dbUtils/item_form.dart';
+import 'package:project_dom/models/users.dart';
+import 'package:project_dom/service/auth_service.dart';
+// import 'package:project_dom/apiUtils/post_list.dart';
+// import 'package:project_dom/dbUtils/item_form.dart';
 import 'package:project_dom/setup.dart';
 import 'package:project_dom/ui/app_bar_widget.dart';
 import 'package:project_dom/ui/assignments/assignments.dart';
@@ -30,6 +32,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  User user = User();
   String currentRoute = defaultRoute;
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
@@ -76,6 +79,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _loadColor(); // Call async function inside initState
+    AuthService()
+        .getProfileLocal()
+        .then((value) => setState(() => user = value));
   }
 
   Future<void> _loadColor() async {
@@ -107,7 +113,7 @@ class _MyAppState extends State<MyApp> {
     Widget page;
     switch (currentRoute) {
       case '/home':
-        page = const HomeWidget();
+        page = HomeWidget(user: user);
         title = "Mathematics";
       case '/notice':
         page = const NoticePage();
@@ -145,6 +151,7 @@ class _MyAppState extends State<MyApp> {
       default:
         throw UnimplementedError('no widget for $currentRoute');
     }
+    // print(currentRoute);
     return MaterialApp(
       debugShowCheckedModeBanner: showDebug,
       title: 'Project DoM',
@@ -175,6 +182,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: ViewEntryPoint(
+        user: user,
         page: page,
         onPageChange: changePage,
         currentRoute: currentRoute,
@@ -208,6 +216,7 @@ class _MyAppState extends State<MyApp> {
 
 class ViewEntryPoint extends StatelessWidget {
   const ViewEntryPoint({
+    required this.user,
     required this.page,
     required this.onPageChange,
     required this.currentRoute,
@@ -217,6 +226,7 @@ class ViewEntryPoint extends StatelessWidget {
     super.key,
   });
 
+  final User user;
   final Widget page;
   final Function(String) onPageChange;
   final String currentRoute;
@@ -248,10 +258,12 @@ class ViewEntryPoint extends StatelessWidget {
       drawer: DrawerWidget(
         onPageChange: onPageChange,
         currentRoute: currentRoute,
+        user: user,
       ),
       endDrawer: DrawerWidget(
         onPageChange: onPageChange,
         currentRoute: currentRoute,
+        user: user,
       ),
       endDrawerEnableOpenDragGesture: true,
       drawerEnableOpenDragGesture: true,

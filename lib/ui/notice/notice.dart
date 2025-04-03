@@ -14,7 +14,7 @@ class NoticePage extends StatelessWidget {
           description: 'Description 1',
           date: '2023-09-01',
           noticeType: NoticeType.official,
-          notifier: User(name: 'John Doe'),
+          notifier: User(fullName: 'John Doe'),
           imageUrl:
               'https://easanfineart.com/wp-content/uploads/2023/11/Art-11.jpeg'),
       Notice(
@@ -23,7 +23,7 @@ class NoticePage extends StatelessWidget {
           description: 'Description 2',
           date: '2023-09-02',
           noticeType: NoticeType.cr,
-          notifier: User(name: 'Jane Smith'),
+          notifier: User(fullName: 'Jane Smith'),
           imageUrl:
               'https://easanfineart.com/wp-content/uploads/2023/11/Art-6-600x600.jpg'),
       Notice(
@@ -32,7 +32,7 @@ class NoticePage extends StatelessWidget {
           description: 'Description 3',
           date: '2023-09-03',
           noticeType: NoticeType.personal,
-          notifier: User(name: 'Bob Johnson'),
+          notifier: User(fullName: 'Bob Johnson'),
           imageUrl: ''),
       Notice(
           id: 4,
@@ -40,7 +40,7 @@ class NoticePage extends StatelessWidget {
           description: 'Description 4',
           date: '2023-09-04',
           noticeType: NoticeType.club,
-          notifier: User(name: 'Alice Brown'),
+          notifier: User(fullName: 'Alice Brown'),
           imageUrl:
               'https://easanfineart.com/wp-content/uploads/2023/11/Art-2-600x600.jpg'),
     ];
@@ -120,7 +120,7 @@ class NoticeWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                " - ${notice.notifier.name}",
+                " - ${notice.notifier.fullName}",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.grey,

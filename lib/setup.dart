@@ -1,2 +1,3 @@
 bool showDebug = false;
-String defaultRoute = '/profile';
+String defaultRoute = '/home';
+String apiUrl = 'http://localhost:8080/api';

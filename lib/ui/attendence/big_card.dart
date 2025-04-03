@@ -33,7 +33,7 @@ class BigCard extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   Text(
-                    "Name: ${student.name}",
+                    "Name: ${student.fullName}",
                     style: style.copyWith(fontSize: 18),
                   ),
                   SizedBox(height: 6),

@@ -1,6 +1,7 @@
 class User {
   int? id;
-  String name;
+  String? fullName;
+  String? username;
   String? email;
   String? password;
   int? phone;
@@ -12,7 +13,8 @@ class User {
 
   User({
     this.id,
-    required this.name,
+    this.fullName,
+    this.username,
     this.email,
     this.password,
     this.phone,
@@ -21,4 +23,23 @@ class User {
     this.createdAt,
     this.updatedAt,
   });
+  @override
+  String toString() {
+    return 'User{id: $id, fullName: $fullName, username: $username, email: $email, password: $password, phone: $phone, address: $address, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
+
+  static fromJson(json) {
+    return User(
+      id: json['id'],
+      fullName: json['fullName'],
+      username: json['username'],
+      email: json['email'],
+      password: json['password'],
+      phone: json['phone'],
+      address: json['address'],
+      imageUrl: json['imageUrl'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+    );
+  }
 }

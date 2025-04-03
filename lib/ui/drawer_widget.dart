@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_dom/models/users.dart';
 
 // import '../main copy.dart';
 
@@ -6,23 +7,32 @@ class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
     required this.onPageChange,
     required this.currentRoute,
+    required this.user,
     super.key,
   });
 
   final Function(String) onPageChange;
   final String currentRoute;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: colorScheme.primary,
       child: SingleChildScrollView(
         child: Column(
           children: [
             ListTile(
               title: UserAccountsDrawerHeader(
-                accountName: Text('Dmitry'),
-                accountEmail: Text('dmitry@me.com'),
+                accountName: Text(
+                  user.fullName ?? 'Not Logged In',
+                  style: TextStyle(color: colorScheme.onPrimary),
+                ),
+                accountEmail: Text(
+                  user.email ?? 'Click to log in',
+                  style: TextStyle(color: colorScheme.onPrimary),
+                ),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage:
                       Image.asset('assets/bg/morning_bg.jpg').image,

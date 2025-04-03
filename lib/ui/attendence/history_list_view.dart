@@ -56,7 +56,7 @@ class _HistoryListViewState extends State<HistoryListView> {
                         color: Colors.red,
                       ),
                 label: Text(
-                  '${student.classRoll} - ${student.name}',
+                  '${student.classRoll} - ${student.fullName}',
                   style: TextStyle(
                     color: appState.attended.contains(student)
                         ? Colors.green

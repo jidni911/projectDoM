@@ -104,7 +104,7 @@ class BookRequestCard extends StatelessWidget {
                   : Icon(Icons.person, size: 50),
               Column(children: [
                 Text(
-                  '${student.name} ( ${student.getYear()} )',
+                  '${student.fullName} ( ${student.getYear()} )',
                   style: TextStyle(color: Colors.grey),
                 ),
                 Text(

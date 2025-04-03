@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_dom/ui/profile/login_form.dart';
+import 'package:project_dom/ui/profile/profile_view.dart';
 import 'package:project_dom/ui/profile/registration_form.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,7 +18,7 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     super.initState();
     // Initialize TabController for 3 tabs
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 2);
   }
 
   @override
@@ -44,27 +46,9 @@ class _ProfilePageState extends State<ProfilePage>
               // Page 1
               RegistrationForm(),
               // Page 2
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.home, size: 50, color: Colors.green),
-                    SizedBox(height: 20),
-                    Text('This is Page 2', style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-              ),
+              LoginFormWidget(),
               // Page 3
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.access_alarm, size: 50, color: Colors.red),
-                    SizedBox(height: 20),
-                    Text('This is Page 3', style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-              ),
+              ProfileView(),
             ],
           ),
         ),

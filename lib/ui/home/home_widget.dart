@@ -1,15 +1,25 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:project_dom/models/tasks.dart';
+import 'package:project_dom/models/users.dart';
+import 'package:project_dom/service/task_service.dart';
+import 'package:project_dom/ui/home/bading_widget.dart';
+import 'package:project_dom/ui/home/schedule_widget.dart';
+import 'package:project_dom/ui/home/to_do_widget.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget({super.key});
+  const HomeWidget({
+    required this.user,
+    super.key,
+  });
 
+  final User user;
   @override
   State<HomeWidget> createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  TaskService taskService = TaskService();
   List<String> bgImages = [
     "assets/bg/morning_bg.jpg",
     "assets/bg/afternoon_bg.jpg",
@@ -17,7 +27,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   ];
 
   List<String> badingTexts = ["Good Morning", "Good Afternoon", "Good Evening"];
-  String username = "Jidni Khan";
+  User? user;
 
   List<Task> tasks = [
     Task(
@@ -40,26 +50,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         dateTime: DateTime.now()),
   ];
 
-  List<Task> officialSchedule = [
-    Task(
-        id: 1,
-        title: "Task 1",
-        description: "Description for Task 1",
-        isDone: false,
-        dateTime: DateTime.now()),
-    Task(
-        id: 2,
-        title: "Task 2",
-        description: "Description for Task 2",
-        isDone: true,
-        dateTime: DateTime.now()),
-    Task(
-        id: 3,
-        title: "Task 3",
-        description: "Description for Task 3",
-        isDone: false,
-        dateTime: DateTime.now()),
-  ];
+  List<Task> officialSchedule = [];
 
   int currentIndex = 0;
   late Timer _timer;
@@ -68,6 +59,12 @@ class _HomeWidgetState extends State<HomeWidget> {
   void initState() {
     super.initState();
     _startImageCycle();
+    setState(() {
+      user = widget.user;
+    });
+    taskService
+        .getTasks()
+        .then((value) => setState(() => officialSchedule = value));
   }
 
   void _startImageCycle() {
@@ -118,19 +115,21 @@ class _HomeWidgetState extends State<HomeWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BadingTextWidget(
-                    badingText: "${badingTexts[currentIndex]},\n$username"),
+                  badingText:
+                      "${badingTexts[currentIndex]},\n${user?.fullName ?? 'Tester'}!",
+                ),
                 LayoutBuilder(builder: (context, constraints) {
                   if (constraints.maxWidth < 600) {
                     return Column(
-                        children: [
-                          ScheduleWidget(
-                            tasks: officialSchedule,
-                          ),
-                          SizedBox(height: 10),
-                          ToDoWidget(
-                            tasks: tasks,
-                          ),
-                        ],
+                      children: [
+                        ScheduleWidget(
+                          tasks: officialSchedule,
+                        ),
+                        SizedBox(height: 10),
+                        ToDoWidget(
+                          tasks: tasks,
+                        ),
+                      ],
                     );
                   } else {
                     return Row(
@@ -153,161 +152,6 @@ class _HomeWidgetState extends State<HomeWidget> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class BadingTextWidget extends StatelessWidget {
-  const BadingTextWidget({
-    required this.badingText,
-    super.key,
-  });
-
-  final String badingText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top: 50, bottom: 50),
-        padding: EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 10,
-        ), // Adjust padding for shape
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(50), // Ensures pill shape
-        ),
-        child: Text(
-          badingText,
-          style: TextStyle(
-            fontSize: 30,
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class ToDoWidget extends StatelessWidget {
-  const ToDoWidget({required this.tasks, super.key});
-
-  final List<Task> tasks;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-        children: [
-          Container(
-            color: Colors.amber,
-            width: double.infinity,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('To-Do List'),
-              ),
-            ),
-          ),
-          for (var task in tasks) ToDoItemWidget(task: task),
-        ],
-    );
-  }
-}
-
-class ToDoItemWidget extends StatelessWidget {
-  const ToDoItemWidget({required this.task, super.key});
-
-  final Task task;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          leading: Icon(
-              task.isDone ? Icons.check_box : Icons.check_box_outline_blank,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onPrimary), //Checkbox(value: task.isDone, onChanged: null),
-          title: Text(
-            task.title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-          ),
-          subtitle: Text(
-            task.description,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                formatDateTime(task.dateTime),
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  semanticLabel: 'Edit',
-                  color: Colors.orangeAccent,
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  semanticLabel: 'Delete',
-                  color: Colors.redAccent,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String formatDateTime(DateTime dateTime) {
-    return '${dateTime.day}.${dateTime.month}.${dateTime.year}\n${dateTime.hour}:${dateTime.minute}';
-  }
-}
-
-class ScheduleWidget extends StatelessWidget {
-  const ScheduleWidget({required this.tasks, super.key});
-  final List<Task> tasks;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-        children: [
-          Container(
-            color: Colors.amber,
-            width: double.infinity,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Official Schedule'),
-              ),
-            ),
-          ),
-          for (var task in tasks) ToDoItemWidget(task: task),
-        ],
     );
   }
 }

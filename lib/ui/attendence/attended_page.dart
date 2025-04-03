@@ -50,7 +50,7 @@ class AttendedPage extends StatelessWidget {
                             : NetworkImage(student.imageUrl!),
                       ),
                       title: Text(
-                        '${student.classRoll} - ${student.name}',
+                        '${student.classRoll} - ${student.fullName}',
                       ),
                       subtitle: Text("Reg: ${student.registration}"),
                       trailing: IconButton(

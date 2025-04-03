@@ -9,7 +9,7 @@ class Student extends User {
 
   Student(int? id, String name, this.classRoll, this.registration, this.section,
       this.year, String imageUrl, this.session)
-      : super(id: id, name: name, imageUrl: imageUrl);
+      : super(id: id, fullName: name, imageUrl: imageUrl);
 
   String getYear() {
     switch (year) {
