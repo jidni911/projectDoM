@@ -4,16 +4,15 @@ import 'package:project_dom/service/auth_service.dart';
 // import 'package:project_dom/apiUtils/post_list.dart';
 // import 'package:project_dom/dbUtils/item_form.dart';
 import 'package:project_dom/setup.dart';
-import 'package:project_dom/ui/app_bar_widget.dart';
 import 'package:project_dom/ui/assignments/assignments.dart';
 import 'package:project_dom/ui/attendence/attendence.dart';
 import 'package:project_dom/ui/credits/credits.dart';
-import 'package:project_dom/ui/drawer_widget.dart';
 import 'package:project_dom/ui/home/home_widget.dart';
 import 'package:project_dom/ui/library/library.dart';
 import 'package:project_dom/ui/notice/notice.dart';
 import 'package:project_dom/ui/settings/settings.dart';
 import 'package:project_dom/ui/verification/verification.dart';
+import 'package:project_dom/view_entry_point.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ui/profile/profile.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  User user = User();
+  User? user;
   String currentRoute = defaultRoute;
   String title = "Mathematics";
   MaterialAccentColor color = Colors.cyanAccent;
@@ -79,9 +78,14 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _loadColor(); // Call async function inside initState
-    AuthService()
-        .getProfileLocal()
-        .then((value) => setState(() => user = value));
+    refreshUser();
+  }
+
+  Future<void> refreshUser() async {
+    AuthService().getProfileLocal().then((value) => setState(() {
+          user = value;
+          currentRoute = user == null ? "/profile" : "/home";
+        }));
   }
 
   Future<void> _loadColor() async {
@@ -113,7 +117,7 @@ class _MyAppState extends State<MyApp> {
     Widget page;
     switch (currentRoute) {
       case '/home':
-        page = HomeWidget(user: user);
+        page = HomeWidget();
         title = "Mathematics";
       case '/notice':
         page = const NoticePage();
@@ -143,7 +147,7 @@ class _MyAppState extends State<MyApp> {
         );
         title = "Settings";
       case '/profile':
-        page = const ProfilePage();
+        page = ProfilePage(refreshUser: refreshUser);
         title = "Profile";
       case '/credits':
         page = const CreditPage();
@@ -210,63 +214,6 @@ class _MyAppState extends State<MyApp> {
       //   '/profile': (context) => const ProfilePage(),
       //   '/credits': (context) => const CreditPage(),
       // },
-    );
-  }
-}
-
-class ViewEntryPoint extends StatelessWidget {
-  const ViewEntryPoint({
-    required this.user,
-    required this.page,
-    required this.onPageChange,
-    required this.currentRoute,
-    required this.title,
-    required this.brightness,
-    required this.changeBrightness,
-    super.key,
-  });
-
-  final User user;
-  final Widget page;
-  final Function(String) onPageChange;
-  final String currentRoute;
-  final String title;
-  final Brightness brightness;
-  final Function(Brightness) changeBrightness;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBarWidget(
-        title: title,
-        onPageChange: onPageChange,
-        currentRoute: currentRoute,
-        brightness: brightness,
-        changeBrightness: changeBrightness,
-      ),
-      body: page,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        height: 0,
-        child: Text("Under Construction"),
-      ),
-      drawer: DrawerWidget(
-        onPageChange: onPageChange,
-        currentRoute: currentRoute,
-        user: user,
-      ),
-      endDrawer: DrawerWidget(
-        onPageChange: onPageChange,
-        currentRoute: currentRoute,
-        user: user,
-      ),
-      endDrawerEnableOpenDragGesture: true,
-      drawerEnableOpenDragGesture: true,
     );
   }
 }

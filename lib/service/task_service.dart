@@ -10,22 +10,32 @@ class TaskService {
   AuthService authService = AuthService();
 
   Future<List<Task>> getTasks() async {
-    String token = await getToken();
+    String? token = await getToken();
+    if (token == null) {
+      return [];
+    }
     final response = await http.get(
       Uri.parse(baseUrl),
       headers: {'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body)['content'];
-      return data.map((json) => Task.fromMap(json)).toList();
+      try {
+        List<dynamic> data = json.decode(response.body)['content'];
+        return data.map((json) => Task.fromMap(json)).toList();
+      } catch (e) {
+        print("error:$e");
+        return [];
+      }
     } else {
-      throw Exception('Failed to load tasks');
+      print('Failed to load tasks');
+      return [];
     }
   }
 
-  Future<void> createTask(Task task) async {
-    String token = await getToken();
+  Future<Task?> createTask(Task task) async {
+    String? token = await getToken();
+    if (token == null) return null;
     Map<String, dynamic> data = task.toMap();
     data.remove('id');
     final response = await http.post(
@@ -36,13 +46,58 @@ class TaskService {
       },
       body: json.encode(data),
     );
-    if (response.statusCode != 201) {
-      throw Exception('Failed to create task');
+    try {
+      return Task.fromMap(json.decode(response.body));
+    } catch (e) {
+      return null;
     }
   }
 
-  Future<String> getToken() async {
-    String token = await authService.getTokenLocal();
+  Future<String?> getToken() async {
+    String? token = await authService.getTokenLocal();
     return token;
+  }
+
+  Future<bool> deleteTask(int taskId) async {
+    String? token = await getToken();
+    if (token == null) return false;
+    final response = await http.delete(
+      Uri.parse('$baseUrl/$taskId'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    return response.body == "true";
+  }
+
+  Future<Task?> updateTask(Task task) async {
+    String? token = await getToken();
+    if (token == null) return null;
+    Map<String, dynamic> data = task.toMap();
+    final response = await http.put(
+      Uri.parse('$baseUrl/${task.id}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: json.encode(data),
+    );
+    try {
+      return Task.fromMap(json.decode(response.body));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Task?> getTaskById(int id) async {
+    String? token = await getToken();
+    if (token == null) return null;
+    final response = await http.get(
+      Uri.parse('$baseUrl/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    try {
+      return Task.fromMap(json.decode(response.body));
+    } catch (e) {
+      return null;
+    }
   }
 }

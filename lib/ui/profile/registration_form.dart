@@ -94,7 +94,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   void _submitForm() {
     authService.signup(userInfo).then((value) => setState(() {
-          echoWord = value;
+          echoWord = value; //TODO if succeed, navigate to log in
         }));
   }
 
@@ -179,6 +179,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ),
               ],
             ),
+            Text("signed up already?"),
+            ElevatedButton.icon(
+              onPressed: () {
+                context
+                    .findAncestorWidgetOfExactType<TabBarView>()!
+                    .controller!
+                    .index = 1;
+              },
+              label: Text("Log in"),
+              icon: Icon(Icons.login),
+            )
           ],
         ),
       ),

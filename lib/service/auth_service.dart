@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final String baseUrl = '$apiUrl/auth';
-  Future<String> login(String username, String password) async {
+  Future<String?> login(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
@@ -17,13 +17,15 @@ class AuthService {
     );
     if (response.statusCode == 200) {
       if (response.body.isEmpty) {
-        return '';
+        return 'empty response from server';
       }
-      setInfoLocal(response.body);
-      User user = await getProfileLocal();
-      return user.toString();
+      bool result = await setInfoLocal(response.body);
+      if (!result) return 'error saving info';
+      User? user = await getProfileLocal();
+      if (user == null) return 'error getting profile';
+      return null;
     } else {
-      return response.body;
+      return 'error logging in: ${response.body}';
     }
   }
 
@@ -134,14 +136,19 @@ class AuthService {
     return response.body;
   }
 
-  Future<void> setInfoLocal(String info) async {
+  Future<bool> setInfoLocal(String info) async {
+    if (jsonDecode(info)['jwtToken'] == null &&
+        jsonDecode(info)['user'] == null) {
+      return false;
+    }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userInfo', info);
+    return true;
   }
 
-  Future<String> getInfoLocal() async {
+  Future<String?> getInfoLocal() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('userInfo') ?? '';
+    return prefs.getString('userInfo');
   }
 
   Future<void> removeInfoLocal() async {
@@ -149,19 +156,17 @@ class AuthService {
     await prefs.remove('userInfo');
   }
 
-  Future<User> getProfileLocal() async {
-    String value = await getInfoLocal(); // Wait for local data retrieval
-    if (value.isEmpty) return User();
+  Future<User?> getProfileLocal() async {
+    String? value = await getInfoLocal();
+    if (value == null) return null;
     Map<String, dynamic> jsonResponse = jsonDecode(value);
-    JwtResponse jwtResponse = JwtResponse.fromJson(jsonResponse);
-    return jwtResponse.user; // Correctly return the User object
+    return JwtResponse.fromJson(jsonResponse).user;
   }
 
-  Future<String> getTokenLocal() async {
-    String value = await getInfoLocal(); // Wait for local data retrieval
-    if (value.isEmpty) return '';
+  Future<String?> getTokenLocal() async {
+    String? value = await getInfoLocal();
+    if (value == null) return null;
     Map<String, dynamic> jsonResponse = jsonDecode(value);
-    JwtResponse jwtResponse = JwtResponse.fromJson(jsonResponse);
-    return jwtResponse.jwtToken; // Correctly return the User object
+    return JwtResponse.fromJson(jsonResponse).jwtToken;
   }
 }

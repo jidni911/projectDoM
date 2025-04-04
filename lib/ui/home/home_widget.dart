@@ -1,25 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:project_dom/models/tasks.dart';
 import 'package:project_dom/models/users.dart';
-import 'package:project_dom/service/task_service.dart';
+import 'package:project_dom/service/auth_service.dart';
 import 'package:project_dom/ui/home/bading_widget.dart';
 import 'package:project_dom/ui/home/schedule_widget.dart';
-import 'package:project_dom/ui/home/to_do_widget.dart';
+import 'package:project_dom/ui/home/tasks/to_do_widget.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({
-    required this.user,
     super.key,
   });
 
-  final User user;
   @override
   State<HomeWidget> createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  TaskService taskService = TaskService();
   List<String> bgImages = [
     "assets/bg/morning_bg.jpg",
     "assets/bg/afternoon_bg.jpg",
@@ -29,50 +25,31 @@ class _HomeWidgetState extends State<HomeWidget> {
   List<String> badingTexts = ["Good Morning", "Good Afternoon", "Good Evening"];
   User? user;
 
-  List<Task> tasks = [
-    Task(
-        id: 1,
-        title: "Task 1",
-        description: "Description for Task 1",
-        isDone: false,
-        dateTime: DateTime.now()),
-    Task(
-        id: 2,
-        title: "Task 2",
-        description: "Description for Task 2",
-        isDone: true,
-        dateTime: DateTime.now()),
-    Task(
-        id: 3,
-        title: "Task 3",
-        description: "Description for Task 3",
-        isDone: false,
-        dateTime: DateTime.now()),
-  ];
-
-  List<Task> officialSchedule = [];
-
   int currentIndex = 0;
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _startImageCycle();
     setState(() {
-      user = widget.user;
+      DateTime now = DateTime.now();
+      int hour = now.hour;
+      if (hour < 12) {
+        currentIndex = 0;
+      } else if (hour < 17) {
+        currentIndex = 1;
+      } else {
+        currentIndex = 2;
+      }
     });
-    taskService
-        .getTasks()
-        .then((value) => setState(() => officialSchedule = value));
+
+    refreshUser();
   }
 
-  void _startImageCycle() {
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      setState(() {
-        currentIndex = (currentIndex + 1) % bgImages.length;
-      });
-    });
+  Future<void> refreshUser() async {
+    AuthService().getProfileLocal().then((value) => setState(() {
+          user = value;
+        }));
   }
 
   @override
@@ -122,27 +99,17 @@ class _HomeWidgetState extends State<HomeWidget> {
                   if (constraints.maxWidth < 600) {
                     return Column(
                       children: [
-                        ScheduleWidget(
-                          tasks: officialSchedule,
-                        ),
+                        ScheduleWidget(),
                         SizedBox(height: 10),
-                        ToDoWidget(
-                          tasks: tasks,
-                        ),
+                        ToDoWidget(),
                       ],
                     );
                   } else {
                     return Row(
                       children: [
-                        Expanded(
-                            child: ScheduleWidget(
-                          tasks: officialSchedule,
-                        )),
+                        Expanded(child: ScheduleWidget()),
                         SizedBox(width: 10),
-                        Expanded(
-                            child: ToDoWidget(
-                          tasks: tasks,
-                        )),
+                        Expanded(child: ToDoWidget()),
                       ],
                     );
                   }

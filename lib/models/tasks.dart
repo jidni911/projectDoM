@@ -18,7 +18,7 @@ class Task {
     required this.isDone,
     required this.dateTime,
     this.user,
-    this.taskType = TaskType.private,
+    required this.taskType,
   });
 
   @override
@@ -31,9 +31,9 @@ class Task {
       'id': id,
       'title': title,
       'description': description,
-      'isDone': isDone,
+      'done': isDone,
       'dateTime': dateTime.toIso8601String(),
-      'taskType': taskType.name,
+      'taskType': taskType.value,
     };
   }
 
@@ -42,9 +42,10 @@ class Task {
       id: map['id'],
       title: map['title'],
       description: map['description'],
-      isDone: map['isDone'],
+      isDone: map['done'],
       dateTime: DateTime.parse(map['dateTime']),
       user: User.fromJson(map['user']),
+      taskType: TaskTypeExtension.fromValue(map['taskType']),
     );
   }
 }
@@ -52,4 +53,26 @@ class Task {
 enum TaskType {
   private,
   official,
+}
+
+extension TaskTypeExtension on TaskType {
+  String get value {
+    switch (this) {
+      case TaskType.private:
+        return "PRIVATE";
+      case TaskType.official:
+        return "OFFICIAL";
+    }
+  }
+
+  static TaskType fromValue(String value) {
+    switch (value.toUpperCase()) {
+      case "PRIVATE":
+        return TaskType.private;
+      case "OFFICIAL":
+        return TaskType.official;
+      default:
+        throw Exception("Invalid TaskType: $value");
+    }
+  }
 }

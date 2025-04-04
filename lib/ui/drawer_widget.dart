@@ -13,7 +13,7 @@ class DrawerWidget extends StatelessWidget {
 
   final Function(String) onPageChange;
   final String currentRoute;
-  final User user;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class DrawerWidget extends StatelessWidget {
             ListTile(
               title: UserAccountsDrawerHeader(
                 accountName: Text(
-                  user.fullName ?? 'Not Logged In',
+                  user?.fullName ?? 'Not Logged In',
                   style: TextStyle(color: colorScheme.onPrimary),
                 ),
                 accountEmail: Text(
-                  user.email ?? 'Click to log in',
+                  user?.email ?? 'Click to log in',
                   style: TextStyle(color: colorScheme.onPrimary),
                 ),
                 currentAccountPicture: CircleAvatar(

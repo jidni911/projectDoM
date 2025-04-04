@@ -4,7 +4,9 @@ import 'package:project_dom/ui/profile/profile_view.dart';
 import 'package:project_dom/ui/profile/registration_form.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({required this.refreshUser, super.key});
+
+  final Function refreshUser;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -46,9 +48,9 @@ class _ProfilePageState extends State<ProfilePage>
               // Page 1
               RegistrationForm(),
               // Page 2
-              LoginFormWidget(),
+              LoginFormWidget(refreshUser: widget.refreshUser),
               // Page 3
-              ProfileView(),
+              ProfileView(refreshUser: widget.refreshUser),
             ],
           ),
         ),

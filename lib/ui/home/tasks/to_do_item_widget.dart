@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:project_dom/models/tasks.dart';
 
 class ToDoItemWidget extends StatelessWidget {
-  const ToDoItemWidget({required this.task, super.key});
+  const ToDoItemWidget({
+    required this.doTask,
+    required this.editTask,
+    required this.deleteTask,
+    required this.task,
+    super.key,
+  });
 
   final Task task;
+
+  final Function doTask, editTask, deleteTask;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +24,13 @@ class ToDoItemWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
-          leading: Icon(
+          leading: IconButton(
+            onPressed: () => doTask(task.id),
+            icon: Icon(
               task.isDone ? Icons.check_box : Icons.check_box_outline_blank,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onPrimary), //Checkbox(value: task.isDone, onChanged: null),
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
           title: Text(
             task.title,
             style: TextStyle(
@@ -49,7 +59,7 @@ class ToDoItemWidget extends StatelessWidget {
                   semanticLabel: 'Edit',
                   color: Colors.orangeAccent,
                 ),
-                onPressed: () {},
+                onPressed: () => editTask(task.id),
               ),
               IconButton(
                 icon: Icon(
@@ -57,7 +67,7 @@ class ToDoItemWidget extends StatelessWidget {
                   semanticLabel: 'Delete',
                   color: Colors.redAccent,
                 ),
-                onPressed: () {},
+                onPressed: () => deleteTask(task.id),
               ),
             ],
           ),

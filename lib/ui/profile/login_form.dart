@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project_dom/service/auth_service.dart';
 
 class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({super.key});
+  const LoginFormWidget({required this.refreshUser, super.key});
+  final Function refreshUser;
 
   @override
   State<LoginFormWidget> createState() => _LoginFormWidgetState();
@@ -22,6 +23,14 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       authService
           .login(usernameController.text, passwordController.text)
           .then((value) => setState(() {
+                if (value == null) {
+                  widget.refreshUser();
+                  context
+                      .findAncestorWidgetOfExactType<TabBarView>()!
+                      .controller!
+                      .index = 2;
+                  return;
+                }
                 echoWord = value;
                 if (value.isEmpty) {
                   usernameValid = false;
@@ -99,6 +108,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 ),
               ],
             ),
+            Text("new here ?"),
+            ElevatedButton.icon(
+              onPressed: () {
+                context
+                    .findAncestorWidgetOfExactType<TabBarView>()!
+                    .controller!
+                    .index = 0;
+              },
+              label: Text("Sign up"),
+              icon: Icon(Icons.app_registration),
+            )
           ],
         ),
       ),
