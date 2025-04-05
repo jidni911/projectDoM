@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> refreshUser() async {
     AuthService().getProfileLocal().then((value) => setState(() {
           user = value;
-          currentRoute = user == null ? "/profile" : "/home";
+          currentRoute = user == null ? "/profile" : defaultRoute;
         }));
   }
 

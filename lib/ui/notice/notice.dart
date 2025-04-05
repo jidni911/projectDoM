@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:project_dom/models/notices.dart';
 import 'package:project_dom/models/users.dart';
 
-class NoticePage extends StatelessWidget {
+class NoticePage extends StatefulWidget {
   const NoticePage({super.key});
 
+  @override
+  State<NoticePage> createState() => _NoticePageState();
+}
+
+class _NoticePageState extends State<NoticePage> {
   @override
   Widget build(BuildContext context) {
     List<Notice> notices = [
