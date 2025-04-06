@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project_dom/models/notices.dart';
 import 'package:project_dom/models/users.dart';
+import 'package:project_dom/service/auth_service.dart';
+import 'package:project_dom/service/notice_service.dart';
+import 'package:project_dom/ui/notice/new_notice_form.dart';
+import 'package:project_dom/ui/notice/notice_item_widget.dart';
 
 class NoticePage extends StatefulWidget {
   const NoticePage({super.key});
@@ -10,45 +14,32 @@ class NoticePage extends StatefulWidget {
 }
 
 class _NoticePageState extends State<NoticePage> {
+  NoticeService noticeService = NoticeService();
+  User? user;
+  List<Notice> notices = [];
+  @override
+  void initState() {
+    super.initState();
+    refreshUser();
+    loadNotices();
+  }
+
+  loadNotices() async {
+    List<Notice> notices = await noticeService.getNotices();
+    setState(() {
+      this.notices = notices;
+    });
+  }
+
+  refreshUser() async {
+    User? user = await AuthService().getProfileLocal();
+    setState(() {
+      this.user = user;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    List<Notice> notices = [
-      Notice(
-          id: 1,
-          title: 'Notice 1',
-          description: 'Description 1',
-          date: '2023-09-01',
-          noticeType: NoticeType.official,
-          notifier: User(fullName: 'John Doe'),
-          imageUrl:
-              'https://easanfineart.com/wp-content/uploads/2023/11/Art-11.jpeg'),
-      Notice(
-          id: 2,
-          title: 'Notice 2',
-          description: 'Description 2',
-          date: '2023-09-02',
-          noticeType: NoticeType.cr,
-          notifier: User(fullName: 'Jane Smith'),
-          imageUrl:
-              'https://easanfineart.com/wp-content/uploads/2023/11/Art-6-600x600.jpg'),
-      Notice(
-          id: 3,
-          title: 'Notice 3',
-          description: 'Description 3',
-          date: '2023-09-03',
-          noticeType: NoticeType.personal,
-          notifier: User(fullName: 'Bob Johnson'),
-          imageUrl: ''),
-      Notice(
-          id: 4,
-          title: 'Notice 4',
-          description: 'Description 4',
-          date: '2023-09-04',
-          noticeType: NoticeType.club,
-          notifier: User(fullName: 'Alice Brown'),
-          imageUrl:
-              'https://easanfineart.com/wp-content/uploads/2023/11/Art-2-600x600.jpg'),
-    ];
+    
     return Stack(children: [
       Container(
         color: Theme.of(context).colorScheme.surface,
@@ -85,127 +76,41 @@ class _NoticePageState extends State<NoticePage> {
                 ),
               ),
             ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Welcome, ${user?.fullName}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    letterSpacing: 2,
+                  )),
+              ),
+            ),
+            if(user!=null) ElevatedButton.icon(
+              onPressed: () async {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Padding(
+                    padding: MediaQuery.of(context).viewInsets,
+                    child: NoticeFormWidget(
+                      loadNotices: loadNotices,
+                    ),
+                  );
+                });
+            
+              },
+              label: Text('Add Notice'),
+              icon: Icon(Icons.add),
+            ),
             SizedBox(height: 10),
-            for (var notice in notices) NoticeWidget(notice: notice),
+            for (var notice in notices) NoticeItemWidget(notice: notice),
           ],
         ),
       ),
     ]);
-  }
-}
-
-class NoticeWidget extends StatelessWidget {
-  const NoticeWidget({super.key, required this.notice});
-  final Notice notice;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ExpansionTile(
-          leading: Icon(
-            Icons.info,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                notice.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  letterSpacing: 2,
-                ),
-              ),
-              Text(
-                " - ${notice.notifier.fullName}",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-          subtitle: Text(
-            "${notice.noticeType} - ${notice.description}",
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(context).colorScheme.onPrimary,
-              letterSpacing: 2,
-            ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                notice.date,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  letterSpacing: 2,
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_drop_down_circle,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-            ],
-          ),
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                notice.title,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  letterSpacing: 5,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                notice.date,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                notice.description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.network(
-                notice.imageUrl!,
-                height: 100,
-                width: 100,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

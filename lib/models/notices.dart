@@ -22,6 +22,18 @@ class Notice {
   String toString() {
     return 'Notice(id: $id, title: $title, description: $description, date: $date, imageUrl: $imageUrl, noticeType: $noticeType, notifier: $notifier)';
   }
+
+  static Notice fromJson(json) {
+    return Notice(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      date: json['date'],
+      noticeType: NoticeType.values[json['noticeType']],
+      notifier: User.fromJson(json['notifier']),
+      imageUrl: json['imageUrl'],
+    );
+  }
 }
 
 enum NoticeType {
