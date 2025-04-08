@@ -28,6 +28,21 @@ class User {
     return 'User{id: $id, fullName: $fullName, username: $username, email: $email, password: $password, phone: $phone, address: $address, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullName': fullName,
+      'username': username,
+      'email': email,
+      'password': password,
+      'phone': phone,
+      'address': address,
+      'imageUrl': imageUrl,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
+  }
+
   static fromJson(json) {
     return User(
       id: json['id'],

@@ -18,6 +18,18 @@ class Notice {
       required this.notifier,
       this.imageUrl});
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'date': date,
+      'noticeType': noticeType.index,
+      'notifier': notifier.toJson(),
+      'imageUrl': imageUrl,
+    };
+  }
+
   @override
   String toString() {
     return 'Notice(id: $id, title: $title, description: $description, date: $date, imageUrl: $imageUrl, noticeType: $noticeType, notifier: $notifier)';
@@ -29,7 +41,11 @@ class Notice {
       title: json['title'],
       description: json['description'],
       date: json['date'],
-      noticeType: NoticeType.values[json['noticeType']],
+      noticeType: NoticeType.values.firstWhere(
+        (e) =>
+            e.name.toUpperCase() == json['noticeType'].toString().toUpperCase(),
+        orElse: () => NoticeType.official,
+      ),
       notifier: User.fromJson(json['notifier']),
       imageUrl: json['imageUrl'],
     );

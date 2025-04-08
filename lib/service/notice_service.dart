@@ -17,10 +17,34 @@ class NoticeService {
     final response = await http.get(Uri.parse(baseUrl), headers: {'Authorization': 'Bearer $token'});
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body)['content'];
+     
       return data.map((json) => Notice.fromJson(json)).toList();
     } else {
-      print('Failed to load tasks');
+      print('Failed to load notices');
       return [];
+    }
+  }
+
+  Future<Notice?> createNotice(Notice notice) async {
+   
+    String? token = await authService.getTokenLocal();
+    if (token == null) return null;
+    Map<String, dynamic> data = notice.toJson();
+    data.remove('id');
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: json.encode(data),
+    );
+ 
+    try {
+      return Notice.fromJson(json.decode(response.body));
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 }

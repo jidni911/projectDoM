@@ -8,6 +8,7 @@ class NoticeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -106,7 +107,7 @@ class NoticeItemWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.network(
-                notice.imageUrl!,
+                notice.imageUrl ?? 'https://static.vecteezy.com/system/resources/thumbnails/011/115/083/small_2x/important-notice-blank-template-in-red-color-free-vector.jpg',
                 height: 100,
                 width: 100,
               ),
