@@ -125,7 +125,7 @@ List<Book> demoBooks = [
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     imageUrl:
-        'https://upload.wikimedia.org/wikipedia/en/5/51/1984_first_edition_cover.jpg',
+        'https://static-01.daraz.com.bd/p/83cb389fea6e3d5df2f85d9bee2949fc.jpg',
   ),
   Book(
     id: 4,
