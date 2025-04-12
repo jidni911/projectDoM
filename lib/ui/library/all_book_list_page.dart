@@ -54,6 +54,15 @@ class _AllBookListPageState extends State<AllBookListPage> {
                 onPressed: () {
                   showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.85,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
                       builder: (context) {
                         return NewBookForm();
                       });

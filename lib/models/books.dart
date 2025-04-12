@@ -10,8 +10,8 @@ class Book {
   int totalCopies;
   int availableCopies;
   String shelfLocation;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   String? imageUrl;
 
   Book({
@@ -26,8 +26,8 @@ class Book {
     required this.totalCopies,
     required this.availableCopies,
     required this.shelfLocation,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     this.imageUrl,
   });
 
@@ -63,8 +63,8 @@ class Book {
       'total_copies': totalCopies,
       'available_copies': availableCopies,
       'shelf_location': shelfLocation,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
       'image_url': imageUrl,
     };
   }
