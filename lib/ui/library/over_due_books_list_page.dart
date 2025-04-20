@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:project_dom/models/book_requests.dart';
 import 'package:project_dom/ui/library/library.dart';
+import 'package:project_dom/ui/library/requested_books_card.dart';
 
 class OverDueBooksListPage extends StatelessWidget {
-  const OverDueBooksListPage({required this.overDueBooks, super.key});
+  OverDueBooksListPage({super.key});
 
-  final List<BookRequest> overDueBooks;
+  final List<BookRequest> overDueBooks = [];
 
   @override
   Widget build(BuildContext context) {

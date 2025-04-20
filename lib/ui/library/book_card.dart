@@ -1,10 +1,157 @@
 import 'package:flutter/material.dart';
 import 'package:project_dom/models/books.dart';
+import 'package:project_dom/service/book_service.dart';
 
 class BookCard extends StatelessWidget {
-  const BookCard({required this.book, super.key});
-
+  const BookCard(
+      {required this.book,
+      super.key,
+      required this.borrowed,
+      required this.loadBorrowList});
   final Book book;
+  final Function() loadBorrowList;
+  final bool borrowed;
+
+  void borrowBook(BuildContext context) async {
+    BookService bookService = BookService();
+    if (book.id == null) return;
+    bool? borrowed = await bookService.borrowBook(book.id!);
+    if (borrowed == null) return;
+    if (borrowed) {
+      loadBorrowList();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Book borrowed successfully!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to borrow book!')),
+      );
+    }
+  }
+
+  void showBookDetails(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  if (book.imageUrl != null)
+                    Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          book.imageUrl!,
+                          height: 180,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  Text(
+                    book.title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'by ${book.author}',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                  ),
+                  const Divider(height: 30, thickness: 1),
+                  _buildDetailRow('ISBN', book.isbn),
+                  _buildDetailRow('Publisher', book.publisher),
+                  _buildDetailRow(
+                    'Published Date',
+                    _formatDate(book.publishedDate),
+                  ),
+                  _buildDetailRow('Category', book.category),
+                  _buildDetailRow('Language', book.language),
+                  _buildDetailRow(
+                    'Shelf Location',
+                    book.shelfLocation,
+                  ),
+                  _buildDetailRow(
+                    'Available Copies',
+                    book.availableCopies.toString(),
+                  ),
+                  _buildDetailRow(
+                    'Total Copies',
+                    book.totalCopies.toString(),
+                  ),
+                  if (book.createdAt != null)
+                    _buildDetailRow(
+                      'Added On',
+                      _formatDate(book.createdAt!),
+                    ),
+                  if (book.updatedAt != null)
+                    _buildDetailRow(
+                      'Last Updated',
+                      _formatDate(book.updatedAt!),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 130,
+            child: Text(
+              '$title:',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.black87),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +164,14 @@ class BookCard extends StatelessWidget {
           return ListTile(
             leading: book.imageUrl != null
                 ? Image(
-                    image: NetworkImage(book.imageUrl!), height: 50, width: 50)
+                    image: NetworkImage(book.imageUrl!),
+                    height: 50,
+                    width: 50,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.book,
+                      size: 50,
+                    ),
+                  )
                 : Icon(Icons.book, size: 50),
             title: Row(mainAxisSize: MainAxisSize.min, children: [
               Text(book.title),
@@ -37,20 +191,16 @@ class BookCard extends StatelessWidget {
                     '${book.availableCopies} out of ${book.totalCopies} copies available'),
               if (constraints.maxWidth < 650 && constraints.maxWidth >= 490)
                 Text('available ${book.availableCopies} / ${book.totalCopies}'),
-              if (constraints.maxWidth >= 850)
+              if (constraints.maxWidth >= 850 &&
+                  book.availableCopies > 0 &&
+                  !borrowed)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      borrowBook(context);
+                    },
                     child: Text('Borrow'),
-                  ),
-                ),
-              if (constraints.maxWidth >= 850)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Details'),
                   ),
                 ),
               if (constraints.maxWidth < 850)
@@ -69,11 +219,19 @@ class BookCard extends StatelessWidget {
                         child: Text(
                             "available ${book.availableCopies} / ${book.totalCopies}"),
                       ),
-                    PopupMenuItem(value: "edit", child: Text("Borrow")),
-                    PopupMenuItem(value: "delete", child: Text("Details")),
+                    if (book.availableCopies > 0 && !borrowed)
+                      PopupMenuItem(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            borrowBook(context);
+                          },
+                          child: Text('Borrow'),
+                        ),
+                      ),
                   ],
                 )
             ]),
+            onTap: () => showBookDetails(context),
           );
         }
       },

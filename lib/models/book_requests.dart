@@ -3,29 +3,78 @@
 
 // import 'package:project_dom/models/books.dart';
 
+import 'package:project_dom/models/books.dart';
+import 'package:project_dom/models/users.dart';
+
 class BookRequest {
   int? id;
-  int userId;
-  int bookId;
-  DateTime issueDate;
-  DateTime dueDate;
+  User user;
+  Book book;
+  DateTime? issueDate;
+  DateTime? dueDate;
   DateTime? returnDate;
   RequestStatus status;
   double? fineAmount;
 
   BookRequest({
     this.id,
-    required this.userId,
-    required this.bookId,
-    required this.issueDate,
-    required this.dueDate,
+    required this.user,
+    required this.book,
+    this.issueDate,
+    this.dueDate,
     this.returnDate,
     required this.status,
     this.fineAmount,
   });
+
+  static BookRequest fromJson(json) {
+    return BookRequest(
+      id: json['id'],
+      user: User.fromJson(json['user']),
+      book: Book.fromJson(json['book']),
+      issueDate:
+          json['issueDate'] != null ? DateTime.parse(json['issueDate']) : null,
+      dueDate: json['dueDate'] != null ? DateTime.parse(json['dueDate']) : null,
+      returnDate: json['returnDate'] != null
+          ? DateTime.parse(json['returnDate'])
+          : null,
+      status: RequestStatusExtension.fromValue(json['status']),
+      fineAmount: json['fineAmount'],
+    );
+  }
 }
 
-enum RequestStatus { issued, claimed, returned }
+enum RequestStatus { requested, issued, claimed, returned }
+
+extension RequestStatusExtension on RequestStatus {
+  String get value {
+    switch (this) {
+      case RequestStatus.requested:
+        return "REQUESTED";
+      case RequestStatus.issued:
+        return "ISSUED";
+      case RequestStatus.claimed:
+        return "CLAIMED";
+      case RequestStatus.returned:
+        return "RETURNED";
+    }
+  }
+
+  static RequestStatus fromValue(String value) {
+    switch (value.toUpperCase()) {
+      case "REQUESTED":
+        return RequestStatus.requested;
+      case "ISSUED":
+        return RequestStatus.issued;
+      case "CLAIMED":
+        return RequestStatus.claimed;
+      case "RETURNED":
+        return RequestStatus.returned;
+      default:
+        throw Exception("Invalid RequestStatus: $value");
+    }
+  }
+}
 
 // Future<void> main() async {
 //   String temp = "";

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:project_dom/models/book_requests.dart';
 import 'package:project_dom/models/books.dart';
 import 'package:project_dom/service/auth_service.dart';
 import 'package:project_dom/setup.dart';
@@ -16,8 +17,8 @@ class BookService {
     }
     final response = await http
         .get(Uri.parse(baseUrl), headers: {'Authorization': 'Bearer $token'});
-        // print(response.body);
-        // return [];
+    // print(response.body);
+    // return [];
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body)['content'];
       // print(data);
@@ -28,6 +29,7 @@ class BookService {
       return [];
     }
   }
+
   Future<Book?> createBook(Book book) async {
     String? token = await authService.getTokenLocal();
     if (token == null) return null;
@@ -44,8 +46,61 @@ class BookService {
     try {
       return Book.fromJson(json.decode(response.body));
     } catch (e) {
-      print(e.toString());
+      print("book service: $e");
       return null;
+    }
+  }
+
+  Future<bool?> borrowBook(int bookId) async {
+    String? token = await authService.getTokenLocal();
+    if (token == null) return null;
+    final response = await http.get(
+      Uri.parse('$baseUrl/borrow/$bookId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    return response.body == "true";
+  }
+
+  Future<List<Book>> getBorrowedBooks() async {
+    String? token = await authService.getTokenLocal();
+    if (token == null) {
+      return [];
+    }
+    final response = await http.get(Uri.parse('$baseUrl/borrowList'),
+        headers: {'Authorization': 'Bearer $token'});
+    // print(response.body);
+    // return [];
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      // print(data);
+      // return [];
+      return data.map((json) => Book.fromJson(json)).toList();
+    } else {
+      print('Failed to load books');
+      return [];
+    }
+  }
+
+  Future<List<BookRequest>> getBookRequests() async {
+    String? token = await authService.getTokenLocal();
+    if (token == null) {
+      return [];
+    }
+    final response = await http.get(Uri.parse('$baseUrl/bookRequests'),
+        headers: {'Authorization': 'Bearer $token'});
+    // print(response.body);
+    // return [];
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      // print(data);
+      // return [];
+      return data.map((json) => BookRequest.fromJson(json)).toList();
+    } else {
+      print('Failed to load bookRequests');
+      return [];
     }
   }
 }

@@ -14,11 +14,23 @@ class AllBookListPage extends StatefulWidget {
 class _AllBookListPageState extends State<AllBookListPage> {
   BookService bookService = BookService();
   List<Book> books = demoBooks;
+  List<Book> borrowList = [];
 
   @override
   void initState() {
     super.initState();
+    loadBooks();
+    loadBorrowList();
+  }
+
+  loadBooks() {
     bookService.getBooks().then((value) => setState(() => books = value));
+  }
+
+  loadBorrowList() {
+    bookService
+        .getBorrowedBooks()
+        .then((value) => setState(() => borrowList = value));
   }
 
   @override
@@ -64,7 +76,7 @@ class _AllBookListPageState extends State<AllBookListPage> {
                         ),
                       ),
                       builder: (context) {
-                        return NewBookForm();
+                        return NewBookForm(loadBooks: loadBooks);
                       });
                 },
                 icon: Icon(Icons.add),
@@ -76,7 +88,12 @@ class _AllBookListPageState extends State<AllBookListPage> {
         Expanded(
           child: ListView.builder(
             itemCount: books.length,
-            itemBuilder: (context, index) => BookCard(book: books[index]),
+            itemBuilder: (context, index) => BookCard(
+              book: books[index],
+              borrowed:
+                  borrowList.any((element) => element.id == books[index].id),
+              loadBorrowList: loadBorrowList,
+            ),
           ),
         )
       ],

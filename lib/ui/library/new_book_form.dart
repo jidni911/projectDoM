@@ -3,10 +3,12 @@ import 'package:project_dom/models/books.dart';
 import 'package:project_dom/service/book_service.dart';
 
 class NewBookForm extends StatefulWidget {
-  const NewBookForm({super.key});
+  const NewBookForm({super.key, required this.loadBooks});
 
   @override
   State<NewBookForm> createState() => _NewBookFormState();
+
+  final Function loadBooks;
 }
 
 // String title;
@@ -28,17 +30,19 @@ class _NewBookFormState extends State<NewBookForm> {
 
   @override
   Widget build(BuildContext context) {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController authorController = TextEditingController();
-  TextEditingController isbnController = TextEditingController();
-  TextEditingController publisherController = TextEditingController();
-  TextEditingController publishedDateController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController languageController = TextEditingController();
-  TextEditingController totalCopiesController = TextEditingController();
-  TextEditingController availableCopiesController = TextEditingController();
-  TextEditingController shelfLocationController = TextEditingController();
-  List<Book> dBooks = demoBooks;
+    TextEditingController titleController = TextEditingController();
+    TextEditingController authorController = TextEditingController();
+    TextEditingController isbnController = TextEditingController();
+    TextEditingController publisherController = TextEditingController();
+    TextEditingController publishedDateController = TextEditingController();
+    TextEditingController categoryController = TextEditingController();
+    TextEditingController languageController = TextEditingController();
+    TextEditingController totalCopiesController = TextEditingController();
+    TextEditingController availableCopiesController = TextEditingController();
+    TextEditingController shelfLocationController = TextEditingController();
+    TextEditingController imageUrlController = TextEditingController();
+
+    List<Book> dBooks = demoBooks;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -84,6 +88,10 @@ class _NewBookFormState extends State<NewBookForm> {
               controller: shelfLocationController,
               decoration: const InputDecoration(labelText: 'Shelf Location'),
             ),
+            TextField(
+              controller: imageUrlController,
+              decoration: const InputDecoration(labelText: 'Image Url'),
+            ),
             ElevatedButton(
               onPressed: () {
                 var book = Book(
@@ -97,9 +105,11 @@ class _NewBookFormState extends State<NewBookForm> {
                   totalCopies: int.parse(totalCopiesController.text),
                   availableCopies: int.parse(availableCopiesController.text),
                   shelfLocation: shelfLocationController.text,
+                  imageUrl: imageUrlController.text,
                 );
-
-                print(bookService.createBook(book));
+                bookService
+                    .createBook(book)
+                    .then((value) => widget.loadBooks());
                 Navigator.pop(context, book);
               },
               child: const Text('Submit'),
@@ -122,12 +132,13 @@ class _NewBookFormState extends State<NewBookForm> {
                 totalCopiesController.text = '';
                 availableCopiesController.text = '';
                 shelfLocationController.text = '';
+                imageUrlController.text = '';
               },
               child: const Text('Reset'),
             ),
             ElevatedButton(
               onPressed: () {
-                var book= dBooks[count++ % dBooks.length];
+                var book = dBooks[count++ % dBooks.length];
                 titleController.text = book.title;
                 authorController.text = book.author;
                 isbnController.text = book.isbn;
@@ -135,9 +146,11 @@ class _NewBookFormState extends State<NewBookForm> {
                 publishedDateController.text = book.publishedDate.toString();
                 categoryController.text = book.category;
                 languageController.text = book.language;
-                totalCopiesController.text = book.totalCopies.toString(); 
-                availableCopiesController.text = book.availableCopies.toString();
+                totalCopiesController.text = book.totalCopies.toString();
+                availableCopiesController.text =
+                    book.availableCopies.toString();
                 shelfLocationController.text = book.shelfLocation;
+                imageUrlController.text = book.imageUrl ?? '';
               },
               child: const Text('Demo'),
             ),
